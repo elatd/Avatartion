@@ -6,7 +6,6 @@ import { AvatarDownloadOptionModal } from "./components/avatar/AvatarDownloadOpt
 import { Footer } from "./components/Footer";
 
 import { useAvatar } from "./hooks/useAvatar";
-import { Selector } from "./components/parts/Selector";
 
 import { useEffect } from "react";
 import { Confetti } from "@neoconfetti/react";
@@ -55,43 +54,29 @@ function App() {
         <div className="flex items-center justify-center h-[44vh] md:h-[47vh]">
           <AvatarCanvas {...avatar} ref={avatarCanvasRef} />
         </div>
-        <div className="flex flex-col items-center justify-center px-4 pt-6 space-y-2 overflow-x-auto">
-          <div className="flex space-x-3 md:space-x-4">
+        <div className="flex flex-col items-center justify-center px-4 pt-2 space-y-1 overflow-x-auto">
+          <div className="flex space-x-2 md:space-x-3">
             {avatarPartsPickers.map((picker) => (
               <div key={picker.path} className="flex items-center overflow-x-auto">
                 <AvatarPartPicker
                   path={picker.path}
                   onClick={() => openAvatarModalPicker(picker)}
                 />
-                {picker.isModal && (
-                  <Selector
-                    onSelectorClick={() =>
-                      openAvatarModalPicker(picker)
-                    }
-                  />
-                )}
               </div>
             ))}
           </div>
-          <div className="flex space-x-3 md:space-x-4">
+          <div className="flex space-x-2 md:space-x-3">
             {restAvatarPartsPickers.map((picker) => (
               <div key={picker.path} className="flex items-center overflow-x-auto">
                 <AvatarPartPicker
                   path={picker.path}
                   onClick={() => openAvatarModalPicker(picker)}
                 />
-                {picker.isModal && (
-                  <Selector
-                    onSelectorClick={() =>
-                      openAvatarModalPicker(picker)
-                    }
-                  />
-                )}
               </div>
             ))}
           </div>
         </div>
-        <div className="flex space-x-2 md:space-x-4 pt-6">
+        <div className="flex justify-center space-x-2 md:space-x-4 pt-4">
           <AvatarPartPicker
             path="base/Download"
             onClick={() => openAvatarDownloadOptionModal()}
