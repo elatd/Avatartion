@@ -17,7 +17,6 @@ type Props = {
 };
 
 export const AvatarPartModal = ({
-  title,
   part,
   src,
   qty,

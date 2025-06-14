@@ -162,7 +162,7 @@ export const useAvatar = (): UseAvatarValues => {
 
     return deserialized;
   });
-  const [isShared, setIsShared] = useState(() => {
+  const [isShared] = useState(() => {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.has("shared") || urlParams.has("avatar");
   });
