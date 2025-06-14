@@ -54,8 +54,12 @@ function App() {
         <div className="flex items-center justify-center h-[44vh] md:h-[47vh]">
           <AvatarCanvas {...avatar} ref={avatarCanvasRef} />
         </div>
-        <div className="flex flex-col items-center justify-center px-4 pt-2 space-y-1 overflow-x-auto">
+        <div className="flex flex-col items-center justify-center px-4 pt-[1cm] space-y-1 overflow-x-auto">
           <div className="flex space-x-2 md:space-x-3">
+            <AvatarPartPicker
+              path="base/Reload"
+              onClick={() => handleRandomizeAvatar()}
+            />
             {avatarPartsPickers.map((picker) => (
               <div key={picker.path} className="flex items-center overflow-x-auto">
                 <AvatarPartPicker
@@ -74,17 +78,11 @@ function App() {
                 />
               </div>
             ))}
+            <AvatarPartPicker
+              path="base/Download"
+              onClick={() => openAvatarDownloadOptionModal()}
+            />
           </div>
-        </div>
-        <div className="flex justify-center space-x-2 md:space-x-4 pt-4">
-          <AvatarPartPicker
-            path="base/Download"
-            onClick={() => openAvatarDownloadOptionModal()}
-          />
-          <AvatarPartPicker
-            path="base/Reload"
-            onClick={() => handleRandomizeAvatar()}
-          />
         </div>
         <div className="pb-24">
           <Footer />
