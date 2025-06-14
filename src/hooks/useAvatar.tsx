@@ -1,8 +1,6 @@
 import { useRef, useState } from "react";
 import html2canvas from "html2canvas";
 import { backgrounds } from "../constants/backgrounds";
-import { useSounds } from "./useSounds";
-import toast from "react-hot-toast";
 import { useConfetti } from "./useConfetti";
 import { ConfettiProps } from "@neoconfetti/react";
 
@@ -62,15 +60,11 @@ type UseAvatarValues = {
   handleDownloadAvatarPNG: () => void;
   handleDownloadAvatarSVG: () => void;
   handleRandomizeAvatar: () => void;
-  share: () => void;
   serialize: () => string;
   deserialize: (serializedAvatar: string) => void;
   randomize: (overrides?: Partial<Avatar>) => void;
 };
 
-type UseAvatarType = {
-  soundEnabled: boolean;
-};
 
 const randomPart = (src: string, qty: number) =>
   `${src}${Math.floor(Math.random() * qty + 1)
@@ -153,7 +147,7 @@ const deserializeAvatar = (serializedAvatar: string): Avatar | null => {
   }
 };
 
-export const useAvatar = ({ soundEnabled }: UseAvatarType): UseAvatarValues => {
+export const useAvatar = (): UseAvatarValues => {
   const [avatar, setAvatar] = useState<Avatar>(() => {
     const urlParams = new URLSearchParams(window.location.search);
 
@@ -161,10 +155,6 @@ export const useAvatar = ({ soundEnabled }: UseAvatarType): UseAvatarValues => {
     const deserialized = deserializeAvatar(sharedUrl);
 
     if (!deserialized) {
-      if (sharedUrl) {
-        toast.error("The shared avatar is invalid, randomizing...");
-      }
-
       return getRandomAvatar({
         bg: "bg-transparent",
       });
@@ -189,8 +179,6 @@ export const useAvatar = ({ soundEnabled }: UseAvatarType): UseAvatarValues => {
   const [activePart, setActivePart] = useState("");
   const avatarCanvasRef = useRef<HTMLDivElement | null>(null);
 
-  const { playClickSound, playBoingSound } = useSounds({ soundEnabled });
-
   const { showConfetti, confettiOptions, confettiToggle } = useConfetti();
 
   const randomize = (overrides?: Partial<Avatar>) => {
@@ -198,14 +186,12 @@ export const useAvatar = ({ soundEnabled }: UseAvatarType): UseAvatarValues => {
   };
 
   const handleRandomizeAvatar = () => {
-    playBoingSound();
     randomize();
     setActivePart("");
   };
 
 
   const openAvatarDownloadOptionModal = () => {
-    playClickSound();
     setIsDownloadOptionModalOpen(true);
   };
 
@@ -230,7 +216,6 @@ export const useAvatar = ({ soundEnabled }: UseAvatarType): UseAvatarValues => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    playClickSound();
     confettiToggle();
   };
 
@@ -255,7 +240,6 @@ export const useAvatar = ({ soundEnabled }: UseAvatarType): UseAvatarValues => {
     link.download = "avatartion.svg";
     link.click();
     URL.revokeObjectURL(objectURL);
-    playClickSound();
     confettiToggle();
   };
 
@@ -271,13 +255,11 @@ export const useAvatar = ({ soundEnabled }: UseAvatarType): UseAvatarValues => {
     qty: number;
   }) => {
     setIsAvatarModalPickerOpen(true);
-    playClickSound();
     setAvatarModal({ title, src, part, qty, activePart });
   };
 
   const closeAvatarModalPicker = (part: string, src: string) => {
     setIsAvatarModalPickerOpen(false);
-    playClickSound();
     setActivePart(src);
     setAvatar((prev) => ({
       ...prev,
@@ -285,29 +267,6 @@ export const useAvatar = ({ soundEnabled }: UseAvatarType): UseAvatarValues => {
     }));
   };
 
-  const share = () => {
-    setIsShared(true);
-
-    const url = new URL(window.location.href);
-    url.searchParams.set("avatar", serialize());
-    window.history.pushState(null, "", url);
-
-    const urlString = url.toString();
-
-    const shareData = {
-      title: "Avatartion",
-      text: "Check out my avatar!",
-      url: urlString,
-    };
-
-    if (navigator.share && navigator.canShare(shareData)) {
-      navigator.share(shareData);
-    } else {
-      navigator.clipboard.writeText(urlString);
-      toast.success("Link copied to clipboard");
-      confettiToggle();
-    }
-  };
 
   const serialize = () => {
     return serializeAvatar(avatar);
@@ -423,7 +382,6 @@ export const useAvatar = ({ soundEnabled }: UseAvatarType): UseAvatarValues => {
     handleDownloadAvatarSVG,
     handleRandomizeAvatar,
     openAvatarDownloadOptionModal,
-    share,
     isShared,
     serialize,
     deserialize: deserializeAndLoad,

@@ -73,22 +73,7 @@ export const AvatarPartModal = ({
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-center align-middle shadow-xl transition-all">
-                <Dialog.Title
-                  as="h3"
-                  className="text-lg font-medium leading-6 text-gray-900"
-                >
-                  {title}
-                </Dialog.Title>
-                <div className="mt-2">
-                  <p className="text-sm">
-                    Click any to select and close this window
-                  </p>
-                </div>
-                <div className="mt-2">
-                  <p className="text-sm text-gray-500">
-                    Parts available: {qty}
-                  </p>
-                </div>
+
                 <div className="grid grid-cols-3 gap-10 md:grid-cols-4 md:gap-4 py-4 -mx-2 md:-mx-4 px-4 justify-items-center items-center">
                   {itemsToDisplay.map((index) => {
                     if (index >= qty) return null;
