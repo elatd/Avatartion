@@ -49,18 +49,15 @@ type UseAvatarValues = {
   activePart: string;
   avatarCanvasRef: React.MutableRefObject<HTMLDivElement | null>;
   isAvatarModalPickerOpen: boolean;
-  isBackgroundModalOpen: boolean;
   isDownloadOptionModalOpen: boolean;
   isShared: boolean;
   showConfetti: boolean;
   confettiOptions: ConfettiProps;
   setAvatar: React.Dispatch<React.SetStateAction<Avatar>>;
   setIsAvatarModalPickerOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsBackgroundModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsDownloadOptionModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   openAvatarModalPicker: (avatarModal: AvatarModal) => void;
   closeAvatarModalPicker: (part: string, src: string) => void;
-  openAvatarBackgroundModal: () => void;
   openAvatarDownloadOptionModal: () => void;
   handleDownloadAvatarPNG: () => void;
   handleDownloadAvatarSVG: () => void;
@@ -82,7 +79,7 @@ const randomPart = (src: string, qty: number) =>
 
 const getRandomAvatar = (overrides?: Partial<Avatar>) => {
   return {
-    bg: backgrounds[Math.floor(Math.random() * backgrounds.length)],
+    bg: "bg-transparent",
     body: { src: "base/Body" },
     hair: { src: `${randomPart("hairs/Hair", 32)}` },
     eyes: { src: `${randomPart("eyes/Eye", 6)}` },
@@ -138,7 +135,7 @@ const deserializeAvatar = (serializedAvatar: string): Avatar | null => {
     if (buffer.length !== 9) return null;
 
     const parts = [...buffer].map((b) => b.toString().padStart(2, "0"));
-    const background = backgrounds[buffer[8]];
+    const background = backgrounds[buffer[8]] ?? "bg-transparent";
 
     return {
       bg: background,
@@ -169,7 +166,7 @@ export const useAvatar = ({ soundEnabled }: UseAvatarType): UseAvatarValues => {
       }
 
       return getRandomAvatar({
-        bg: "bg-red-300",
+        bg: "bg-transparent",
       });
     }
 
@@ -180,7 +177,6 @@ export const useAvatar = ({ soundEnabled }: UseAvatarType): UseAvatarValues => {
     return urlParams.has("shared") || urlParams.has("avatar");
   });
   const [isAvatarModalPickerOpen, setIsAvatarModalPickerOpen] = useState(false);
-  const [isBackgroundModalOpen, setIsBackgroundModalOpen] = useState(false);
   const [isDownloadOptionModalOpen, setIsDownloadOptionModalOpen] =
     useState(false);
   const [avatarModal, setAvatarModal] = useState<AvatarModal>({
@@ -207,10 +203,6 @@ export const useAvatar = ({ soundEnabled }: UseAvatarType): UseAvatarValues => {
     setActivePart("");
   };
 
-  const openAvatarBackgroundModal = () => {
-    playClickSound();
-    setIsBackgroundModalOpen(true);
-  };
 
   const openAvatarDownloadOptionModal = () => {
     playClickSound();
@@ -401,19 +393,9 @@ export const useAvatar = ({ soundEnabled }: UseAvatarType): UseAvatarValues => {
       width: 60,
       isModal: true,
     },
-    {
-      text: "Background",
-      path: avatar?.bg || "bg-transparent",
-      title: "Backgrounds",
-      part: "bg",
-      src: "bg-transparent",
-      qty: 0,
-      width: 60,
-      isModal: true,
-    },
   ];
 
-  const excludedAvatarPartsPickers = ["facialHair", "accessories", "bg"];
+  const excludedAvatarPartsPickers = ["facialHair", "accessories"];
   const filteredAvatarPartsPickers = avatarPartsPickers.filter(
     (picker) => !excludedAvatarPartsPickers.includes(picker.part)
   );
@@ -426,7 +408,6 @@ export const useAvatar = ({ soundEnabled }: UseAvatarType): UseAvatarValues => {
     avatarPartsPickers: filteredAvatarPartsPickers,
     restAvatarPartsPickers,
     isAvatarModalPickerOpen,
-    isBackgroundModalOpen,
     isDownloadOptionModalOpen,
     avatarModal,
     activePart,
@@ -435,11 +416,9 @@ export const useAvatar = ({ soundEnabled }: UseAvatarType): UseAvatarValues => {
     confettiOptions,
     setAvatar,
     setIsAvatarModalPickerOpen,
-    setIsBackgroundModalOpen,
     setIsDownloadOptionModalOpen,
     openAvatarModalPicker,
     closeAvatarModalPicker,
-    openAvatarBackgroundModal,
     handleDownloadAvatarPNG,
     handleDownloadAvatarSVG,
     handleRandomizeAvatar,

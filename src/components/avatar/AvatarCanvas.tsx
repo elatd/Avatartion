@@ -21,7 +21,7 @@ type AvatarCanvasProps = {
 export const AvatarCanvas = React.forwardRef<HTMLDivElement, AvatarCanvasProps>(
   (
     {
-      bg = "bg-red-300",
+      bg = "bg-transparent",
       hair,
       eyes,
       mouth,
