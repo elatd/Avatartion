@@ -13,7 +13,7 @@ export const AvatarButtonPickerContainer = ({
     <button
       type="button"
       className={`p-6 ${
-        withBorder ? "border-2 border-black" : ""
+        withBorder ? "border border-black" : ""
       } rounded-full overflow-hidden relative`}
       {...rest}
     >
