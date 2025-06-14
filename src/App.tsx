@@ -27,7 +27,6 @@ function App() {
     isDownloadOptionModalOpen,
     showConfetti,
     confettiOptions,
-    setAvatar,
     setIsAvatarModalPickerOpen,
     setIsDownloadOptionModalOpen,
     openAvatarModalPicker,
@@ -36,7 +35,6 @@ function App() {
     handleDownloadAvatarPNG,
     handleDownloadAvatarSVG,
     handleRandomizeAvatar,
-    share,
     serialize,
   } = useAvatar({ soundEnabled: true });
 
